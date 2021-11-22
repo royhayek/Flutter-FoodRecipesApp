@@ -7,7 +7,7 @@ class AppConfig {
 
   // Host URL (Replace it with your host)
   // Do not add "/" at the end
-  static const URL = 'http://example.com';
+  static const URL = 'http://flutterfoodrecipes.royhayek.com';
 
   ////////////////////////////////////////
   //           SPLASH SCREEN            //
@@ -40,7 +40,7 @@ class AppConfig {
 
   // Google Play package name
   static const GooglePlayIdentifier =
-      'com.example.foodrecipes'; //example: com.companyname.appname
+      'com.royhayek.flutterfoodrecipes'; //example: com.companyname.appname
 
   // AppStore identifier
   static const AppStoreIdentifier = '1491556149'; // example: 1491556149

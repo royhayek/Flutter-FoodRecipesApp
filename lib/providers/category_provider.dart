@@ -64,8 +64,8 @@ class CategoryProvider extends ChangeNotifier {
         notifyListeners();
       }
       if (loading) _categoriesPage++;
-      var response = await http.get(AppConfig.URL +
-          '/api/fetchCategories/$lang/${AppConfig.PerPage}?page=$_categoriesPage');
+      var response = await http.get(Uri.parse(AppConfig.URL +
+          '/api/fetchCategories/$lang/${AppConfig.PerPage}?page=$_categoriesPage'));
       CategoryPage categoryPage = categoryPageFromJson(response.body);
       if (refresh) _paginatedCategories.clear();
       _paginatedCategories.addAll(categoryPage.data);

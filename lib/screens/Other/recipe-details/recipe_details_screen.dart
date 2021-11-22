@@ -29,6 +29,7 @@ import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 final BaseCacheManager baseCacheManager = DefaultCacheManager();
 
@@ -494,15 +495,20 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
       child: Icon(Icons.share, size: 27),
       onTap: () => baseCacheManager
           .getSingleFile(_recipeImagesPath + widget.recipe.image)
-          .then((info) {
-        info.readAsBytes().then((bytes) async {
-          await Share.file('${AppConfig.sharingRecipeTitle}', 'esys.png',
-              bytes.buffer.asUint8List(), 'image/png',
-              text: Platform.isAndroid
-                  ? '${AppConfig.sharingRecipeText} \n https://play.google.com/store/apps/details?id=${AppConfig.GooglePlayIdentifier}'
-                  : '${AppConfig.sharingRecipeText} \n https://apps.apple.com/de/app/bbqianer/id${AppConfig.AppStoreIdentifier}');
-        });
-      }),
+          .then(
+        (info) {
+          info.readAsBytes().then(
+            (bytes) async {
+              await Share.share(
+                Platform.isAndroid
+                    ? '${AppConfig.sharingRecipeText} \n https://play.google.com/store/apps/details?id=${AppConfig.GooglePlayIdentifier}'
+                    : '${AppConfig.sharingRecipeText} \n https://apps.apple.com/de/app/bbqianer/id${AppConfig.AppStoreIdentifier}',
+                subject: '${AppConfig.sharingRecipeTitle}',
+              );
+            },
+          );
+        },
+      ),
     );
   }
 

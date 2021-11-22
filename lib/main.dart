@@ -24,6 +24,7 @@ final GlobalKey<NavigatorState> navigatorKey =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   await MobileAds.initialize(
     bannerAdUnitId: AdmobConfig.bannerAdUnitId,

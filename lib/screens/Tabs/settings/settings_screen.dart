@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -22,6 +21,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'languages/languages_screen.dart';
 
@@ -433,15 +433,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _shareApp() {
     if (Platform.isAndroid) {
-      Share.text(
-          '${AppConfig.sharingAppText}',
-          '${AppConfig.sharingAppText} \n ${AppConfig.sharingAppGoogleLink} ',
-          'text/plain');
+      Share.share(
+        '${AppConfig.sharingAppText} \n ${AppConfig.sharingAppGoogleLink} ',
+        subject: '${AppConfig.sharingAppText}',
+      );
     } else if (Platform.isIOS) {
-      Share.text(
-          '${AppConfig.sharingAppText}',
-          '${AppConfig.sharingAppText} \n ${AppConfig.sharingAppAppleLink} ',
-          'text/plain');
+      Share.share(
+        '${AppConfig.sharingAppText} \n ${AppConfig.sharingAppAppleLink} ',
+        subject: '${AppConfig.sharingAppText}',
+      );
     }
   }
 }

@@ -49,8 +49,8 @@ class RecipeProvider extends ChangeNotifier {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
       print(lang);
-      var response = await http.get(AppConfig.URL +
-          '/api/fetchRecentRecipes/$lang/${AppConfig.PerPage}?page=$_page');
+      var response = await http.get(Uri.parse(AppConfig.URL +
+          '/api/fetchRecentRecipes/$lang/${AppConfig.PerPage}?page=$_page'));
       RecipePage categoryPage = recipePageFromJson(response.body);
       if (refresh) _recentRecipes.clear();
       _recentRecipes.addAll(categoryPage.data);
@@ -67,8 +67,8 @@ class RecipeProvider extends ChangeNotifier {
       _mostCollectedStatus = MostCollectedRecipeStatus.Fetching;
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
-      var response = await http
-          .get(AppConfig.URL + '/api/fetchMostCollectedRecipes/$lang');
+      var response = await http.get(
+          Uri.parse(AppConfig.URL + '/api/fetchMostCollectedRecipes/$lang'));
       List<Recipe> _recipes = recipeFromJson(response.body);
       _mostCollectedRecipes = _recipes;
       _mostCollectedStatus = MostCollectedRecipeStatus.Done;
