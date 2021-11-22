@@ -95,7 +95,7 @@ class ApiRepository {
       AppUser user, String deviceName) async {
     try {
       final response = await http.post(
-        API + '/loginUsingSocial',
+        Uri.parse(API + '/loginUsingSocial'),
         body: {
           "authKey": user.authKey,
           "name": user.name,
@@ -114,8 +114,8 @@ class ApiRepository {
 
   static Future<http.Response> tryToken({String token}) async {
     try {
-      http.Response response = await http
-          .get(API + '/user', headers: {'Authorization': 'Bearer $token'});
+      http.Response response = await http.get(Uri.parse(API + '/user'),
+          headers: {'Authorization': 'Bearer $token'});
       print(response.body);
       return response;
     } catch (e) {
@@ -130,8 +130,8 @@ class ApiRepository {
         'id': id.toString(),
         'email': email.trim().toString(),
       };
-      final response =
-          await http.post(API + '/updateEmail', headers: headers, body: body);
+      final response = await http.post(Uri.parse(API + '/updateEmail'),
+          headers: headers, body: body);
       if (200 == response.statusCode) {
         return response;
       } else {
@@ -188,8 +188,8 @@ class ApiRepository {
   // Get the rate average of a recipe from the database
   static Future<String> getRecipeRate(int recipeid) async {
     try {
-      final response =
-          await http.get(API + '/getRecipeRate/$recipeid', headers: headers);
+      final response = await http
+          .get(Uri.parse(API + '/getRecipeRate/$recipeid'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body).cast<String, dynamic>();
         return parsed['rate'];
@@ -204,7 +204,8 @@ class ApiRepository {
   // Get the rate a of user for a specific recipe
   static Future<String> getUserRateOfRecipe(int recipeid, int userid) async {
     try {
-      final response = await http.get(API + '/getUserRate/$recipeid/$userid',
+      final response = await http.get(
+          Uri.parse(API + '/getUserRate/$recipeid/$userid'),
           headers: headers);
       if (200 == response.statusCode) {
         // print(response.body);
@@ -221,8 +222,8 @@ class ApiRepository {
   // Get the number of likes of a recipe from the database
   static Future<int> getRecipeLikes(int recipeid) async {
     try {
-      final response =
-          await http.get(API + '/getRecipeLikes/$recipeid', headers: headers);
+      final response = await http
+          .get(Uri.parse(API + '/getRecipeLikes/$recipeid'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body).cast<String, dynamic>();
         return parsed['likes'];
@@ -345,7 +346,7 @@ class ApiRepository {
       int id, String oldPassword, String newPassword) async {
     try {
       final response = await http.put(
-          API + '/changePassword/$id/$oldPassword/$newPassword',
+          Uri.parse(API + '/changePassword/$id/$oldPassword/$newPassword'),
           headers: headers);
       final responseJson = json.decode(response.body);
       if (200 == response.statusCode) {
@@ -365,7 +366,8 @@ class ApiRepository {
   // Get all recipes from the database
   static Future<List<Recipe>> getAllRecipes() async {
     try {
-      final response = await http.get(API + '/recipes', headers: headers);
+      final response =
+          await http.get(Uri.parse(API + '/recipes'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
         List<Recipe> list =
@@ -383,8 +385,8 @@ class ApiRepository {
   // Get most collected recipes from the database
   static Future<List<Recipe>> getMostCollectedRecipes() async {
     try {
-      final response =
-          await http.get(API + '/showMostCollectedRecipes', headers: headers);
+      final response = await http
+          .get(Uri.parse(API + '/showMostCollectedRecipes'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
         List<Recipe> list =
@@ -404,7 +406,8 @@ class ApiRepository {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
       final response = await http.get(
-          API + '/fetchRecentRecipes/$lang/${AppConfig.PerPage}?page=$page',
+          Uri.parse(API +
+              '/fetchRecentRecipes/$lang/${AppConfig.PerPage}?page=$page'),
           headers: headers);
       print(response.body);
       if (200 == response.statusCode) {
@@ -424,8 +427,8 @@ class ApiRepository {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
       final response = await http.get(
-          API +
-              '/fetchRecipesByCategory/$lang/$id/${AppConfig.PerPage}?page=$page',
+          Uri.parse(API +
+              '/fetchRecipesByCategory/$lang/$id/${AppConfig.PerPage}?page=$page'),
           headers: headers);
       if (200 == response.statusCode) {
         return recipePageFromJson(response.body);
@@ -444,8 +447,8 @@ class ApiRepository {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
       final response = await http.get(
-          API +
-              '/fetchRecipesByCuisine/$lang/$id/${AppConfig.PerPage}?page=$page',
+          Uri.parse(API +
+              '/fetchRecipesByCuisine/$lang/$id/${AppConfig.PerPage}?page=$page'),
           headers: headers);
       if (200 == response.statusCode) {
         return recipePageFromJson(response.body);
@@ -460,7 +463,8 @@ class ApiRepository {
 
   static Future<Recipe> getUserRecipe(int id) async {
     try {
-      final response = await http.get(API + '/recipes/$id', headers: headers);
+      final response =
+          await http.get(Uri.parse(API + '/recipes/$id'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = jsonDecode(response.body);
         Recipe r = Recipe.fromJson(parsed);
@@ -483,8 +487,9 @@ class ApiRepository {
         'Accept': "application/json",
         'Authorization': 'Bearer $token',
       };
-      final response =
-          await http.get(API + '/showRecipesByUser' + '/$id', headers: headers);
+      final response = await http.get(
+          Uri.parse(API + '/showRecipesByUser' + '/$id'),
+          headers: headers);
       if (200 == response.statusCode) {
         RecipeData recipeData = recipeDataFromJson(response.body);
         return recipeData;
@@ -506,7 +511,7 @@ class ApiRepository {
         'userId': userId.toString(),
         'lang': lang.toString(),
       };
-      final response = await http.post(API + '/getUserFavorites',
+      final response = await http.post(Uri.parse(API + '/getUserFavorites'),
           body: data, headers: headers);
       print(response.body);
       return recipeFromJson(response.body);
@@ -521,8 +526,9 @@ class ApiRepository {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
       var headers = {'Accept': "application/json"};
-      final response = await http
-          .get(API + '/fetchProfileUserRecipes/$lang/$id', headers: headers);
+      final response = await http.get(
+          Uri.parse(API + '/fetchProfileUserRecipes/$lang/$id'),
+          headers: headers);
       RecipeData recipeData = recipeDataFromJson(response.body);
       return recipeData;
     } catch (e) {
@@ -535,7 +541,7 @@ class ApiRepository {
   static Future<bool> addUserFollow(int userId, int followerId) async {
     try {
       final response = await http.post(
-          API + '/addUserFollow' + '/$userId/$followerId',
+          Uri.parse(API + '/addUserFollow' + '/$userId/$followerId'),
           headers: headers);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
@@ -553,7 +559,7 @@ class ApiRepository {
   static Future<bool> addUserRate(int userId, double rate, int recipeId) async {
     try {
       final response = await http.post(
-          API + '/addRecipeRate' + '/$recipeId/$userId/$rate',
+          Uri.parse(API + '/addRecipeRate' + '/$recipeId/$userId/$rate'),
           headers: headers);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
@@ -572,8 +578,9 @@ class ApiRepository {
     try {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
-      final response = await http
-          .get(API + '/getProfileInfo/$lang' + '/$userId', headers: headers);
+      final response = await http.get(
+          Uri.parse(API + '/getProfileInfo/$lang' + '/$userId'),
+          headers: headers);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
         return data;
@@ -590,7 +597,7 @@ class ApiRepository {
   static Future<bool> checkIfUserIsFollowing(int userId, int followerId) async {
     try {
       final response = await http.get(
-          API + '/checkIfUserIsFollowing/$userId/$followerId',
+          Uri.parse(API + '/checkIfUserIsFollowing/$userId/$followerId'),
           headers: headers);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
@@ -608,8 +615,8 @@ class ApiRepository {
   // Add device token to the database
   static Future<String> addDevice(String token) async {
     try {
-      final response =
-          await http.post(API + '/setDeviceToken/$token', headers: headers);
+      final response = await http
+          .post(Uri.parse(API + '/setDeviceToken/$token'), headers: headers);
       if (201 == response.statusCode) {
         print(response.body);
         return response.body;
@@ -625,7 +632,8 @@ class ApiRepository {
   // Get comments of a specific recipe from the database
   static Future<List<Comment>> getRecipeComments(int recipeid) async {
     try {
-      final response = await http.get(API + '/getRecipeComments/$recipeid',
+      final response = await http.get(
+          Uri.parse(API + '/getRecipeComments/$recipeid'),
           headers: headers);
       print(response.body);
       print(response.statusCode);
@@ -644,7 +652,8 @@ class ApiRepository {
   // Get user following from the database
   static Future<http.Response> fetchUserFollowingFollowers(int userid) async {
     try {
-      final response = await http.get(API + '/fetchFollowingFollowers/$userid',
+      final response = await http.get(
+          Uri.parse(API + '/fetchFollowingFollowers/$userid'),
           headers: headers);
       if (200 == response.statusCode) {
         return response;
@@ -662,7 +671,7 @@ class ApiRepository {
       int userid, int recipeid, String comment) async {
     try {
       final response = await http.post(
-          API + '/addRecipeComment/$recipeid/$userid/$comment',
+          Uri.parse(API + '/addRecipeComment/$recipeid/$userid/$comment'),
           headers: headers);
       if (201 == response.statusCode) {
         Fluttertoast.showToast(msg: 'comment_added_successfully'.tr());
@@ -679,8 +688,8 @@ class ApiRepository {
   // Update recipe number of views in the database
   static Future<String> updateRecipeViews(int id) async {
     try {
-      final response =
-          await http.put(API + '/updateRecipeView/$id', headers: headers);
+      final response = await http.put(Uri.parse(API + '/updateRecipeView/$id'),
+          headers: headers);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
         print(data['message']);
@@ -698,8 +707,10 @@ class ApiRepository {
   static Future<String> updateRecipeLikes(int id, String operation) async {
     try {
       var map = Map<String, dynamic>();
-      final response = await http.put(API + '/updateRecipeLikes/$id/$operation',
-          body: map, headers: headers);
+      final response = await http.put(
+          Uri.parse(API + '/updateRecipeLikes/$id/$operation'),
+          body: map,
+          headers: headers);
       if (200 == response.statusCode) {
         print(response.body);
         return response.body;
@@ -715,8 +726,8 @@ class ApiRepository {
   // Delete user image from the database
   static Future<http.Response> deleteUserImage(int id) async {
     try {
-      final response =
-          await http.delete(API + '/deleteImage/$id', headers: headers);
+      final response = await http.delete(Uri.parse(API + '/deleteImage/$id'),
+          headers: headers);
       if (200 == response.statusCode) {
         return response;
       } else {
@@ -731,8 +742,8 @@ class ApiRepository {
   // Delete recipe comment of a specific user from the database
   static Future<String> deleteUserComment(int id) async {
     try {
-      final response =
-          await http.delete(API + '/deleteUserComment/$id', headers: headers);
+      final response = await http
+          .delete(Uri.parse(API + '/deleteUserComment/$id'), headers: headers);
       if (200 == response.statusCode) {
         Fluttertoast.showToast(msg: 'comment_deleted_successfully'.tr());
         return response.body;
@@ -749,7 +760,7 @@ class ApiRepository {
   static Future<String> deleteRecipe(int id) async {
     try {
       final response =
-          await http.delete(API + '/recipes/$id', headers: headers);
+          await http.delete(Uri.parse(API + '/recipes/$id'), headers: headers);
       if (204 == response.statusCode) {
         Fluttertoast.showToast(msg: 'deleted_recipe'.tr());
         return response.body;
@@ -767,8 +778,8 @@ class ApiRepository {
     try {
       var map = Map<String, dynamic>();
       map['email'] = email;
-      final response =
-          await http.post(API + '/forgotPassword', body: map, headers: headers);
+      final response = await http.post(Uri.parse(API + '/forgotPassword'),
+          body: map, headers: headers);
       print(response.body);
       if (200 == response.statusCode) {
         var data = json.decode(response.body);
@@ -784,8 +795,8 @@ class ApiRepository {
 
   static Future<List<AppUser>> queryUserSearch(String name, int id) async {
     try {
-      final response =
-          await http.get(API + '/users/search/$name/$id', headers: headers);
+      final response = await http
+          .get(Uri.parse(API + '/users/search/$name/$id'), headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
         List<AppUser> list =
@@ -805,8 +816,9 @@ class ApiRepository {
     try {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
-      final response =
-          await http.get(API + '/recipes/search/$lang/$name', headers: headers);
+      final response = await http.get(
+          Uri.parse(API + '/recipes/search/$lang/$name'),
+          headers: headers);
       if (200 == response.statusCode) {
         print(response.body);
         List<Recipe> _recipes = recipeFromJson(response.body);
@@ -822,8 +834,9 @@ class ApiRepository {
 
   static Future<bool> checkAccountstatus(int userId) async {
     try {
-      final response =
-          await http.get(API + '/checkAccountStatus/$userId', headers: headers);
+      final response = await http.get(
+          Uri.parse(API + '/checkAccountStatus/$userId'),
+          headers: headers);
       if (200 == response.statusCode) {
         final parsed = json.decode(response.body);
         return parsed['status'];

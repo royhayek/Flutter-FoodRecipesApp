@@ -18,13 +18,13 @@ class RequestHelper {
   }
 
   postData(data, endpoint) async {
-    return await http.post(API + endpoint,
+    return await http.post(Uri.parse(API + endpoint),
         body: jsonEncode(data), headers: _setHeaders());
   }
 
   getData(endpoint) async {
     await _getToken();
-    return await http.get(API + endpoint, headers: _setHeaders());
+    return await http.get(Uri.parse(API + endpoint), headers: _setHeaders());
   }
 
   _setHeaders() => {

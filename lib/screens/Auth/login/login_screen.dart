@@ -244,21 +244,21 @@ class _LoginScreenState extends State<LoginScreen> {
         _languageIconButton(
           'assets/images/flag_ar.png',
           () {
-            context.locale = Locale('ar', 'AL');
+            context.setLocale(Locale('ar', 'AL'));
             _emptyLists();
           },
         ),
         _languageIconButton(
           'assets/images/flag_fr.png',
           () {
-            context.locale = Locale('fr', 'FR');
+            context.setLocale(Locale('fr', 'FR'));
             _emptyLists();
           },
         ),
         _languageIconButton(
           'assets/images/flag_us.png',
           () {
-            context.locale = Locale('en', 'US');
+            context.setLocale(Locale('en', 'US'));
             _emptyLists();
           },
         ),
@@ -485,7 +485,8 @@ class _LoginScreenState extends State<LoginScreen> {
       case FacebookLoginStatus.loggedIn:
         facebookLogin.currentAccessToken.then((accessToken) async {
           final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture.width(800).height(800),first_name,last_name,email&access_token=${accessToken.token}',
+            Uri.parse(
+                'https://graph.facebook.com/v2.12/me?fields=name,picture.width(800).height(800),first_name,last_name,email&access_token=${accessToken.token}'),
           );
           final user = await json.decode(graphResponse.body);
 

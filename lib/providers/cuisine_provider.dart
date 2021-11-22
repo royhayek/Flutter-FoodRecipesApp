@@ -39,7 +39,8 @@ class CuisineProvider extends ChangeNotifier {
     try {
       String lang =
           EasyLocalization.of(navigatorKey.currentContext).locale.languageCode;
-      var response = await http.get(AppConfig.URL + '/api/cuisines/$lang');
+      var response =
+          await http.get(Uri.parse(AppConfig.URL + '/api/cuisines/$lang'));
       List<Cuisine> _cuisines = cuisineFromJson(response.body);
       _allCuisines = _cuisines;
       notifyListeners();
@@ -60,8 +61,8 @@ class CuisineProvider extends ChangeNotifier {
         notifyListeners();
       }
       if (loading) _page++;
-      var response = await http.get(AppConfig.URL +
-          '/api/fetchCuisines/$lang/${AppConfig.PerPage}?page=$_page');
+      var response = await http.get(Uri.parse(AppConfig.URL +
+          '/api/fetchCuisines/$lang/${AppConfig.PerPage}?page=$_page'));
       CuisinePage _cuisinePage = cuisinePageFromJson(response.body);
       if (refresh) _paginatedCuisines.clear();
       _paginatedCuisines.addAll(_cuisinePage.data);

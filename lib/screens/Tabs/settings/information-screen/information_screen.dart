@@ -66,7 +66,7 @@ class _InformationScreenState extends State<InformationScreen> {
                       child: Html(
                         data: _information,
                         shrinkWrap: true,
-                        onLinkTap: (url) async {
+                        onLinkTap: (url, context, attributes, element) async {
                           if (await canLaunch(url)) {
                             await launch(url);
                           } else {
@@ -80,11 +80,11 @@ class _InformationScreenState extends State<InformationScreen> {
                             fontWeight: FontWeight.normal,
                           ),
                         },
-                        onImageTap: (src) async {
-                          if (await canLaunch(src)) {
-                            await launch(src);
+                        onImageTap: (url, context, attributes, element) async {
+                          if (await canLaunch(url)) {
+                            await launch(url);
                           } else {
-                            throw 'Could not launch $src';
+                            throw 'Could not launch $url';
                           }
                         },
                       ),

@@ -38,7 +38,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       http.Response response = await http.post(
-        AppConfig.URL + '/api/sanctum/token',
+        Uri.parse(AppConfig.URL + '/api/sanctum/token'),
         body: creds,
         headers: {"Accept": "application/json"},
       );
@@ -171,7 +171,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       print(_token);
       http.Response response = await http.get(
-        AppConfig.URL + '/api/user/revoke',
+        Uri.parse(AppConfig.URL + '/api/user/revoke'),
         headers: {'Authorization': 'Bearer $_token'},
       );
       print(response.body);
